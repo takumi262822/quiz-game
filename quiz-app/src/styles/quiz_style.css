@@ -1,0 +1,127 @@
+:root {
+    --gold-light: #f9e27d;
+    --gold-main: #d4af37;
+    --gold-dark: #a67c00;
+    --gold-glow: rgba(212, 175, 55, 0.4);
+    --royal-blue: #000814;
+    --deep-black: #000000;
+    --correct: #27ae60;
+    --wrong: #c0392b;
+}
+
+body {
+    background: radial-gradient(circle at center, #001d3d 0%, var(--deep-black) 100%);
+    color: white; font-family: 'Georgia', serif; 
+    margin: 0; display: flex; justify-content: center; align-items: center; 
+    min-height: 100vh; overflow-x: hidden;
+}
+
+/* 浮遊粒子の演出 */
+body::before {
+    content: ""; position: fixed; width: 100%; height: 100%;
+    background-image: radial-gradient(var(--gold-main) 1px, transparent 1px);
+    background-size: 80px 80px; opacity: 0.15; animation: move 60s linear infinite; z-index: -1;
+}
+@keyframes move { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+
+/* メインステージ：PCはワイド、スマホはスリム */
+#game-stage {
+    width: 95%; max-width: 850px; position: relative; z-index: 10; 
+    padding: 30px 20px;
+    border: 1px solid var(--gold-dark); background: rgba(0, 5, 15, 0.95);
+    box-shadow: 0 0 50px rgba(0,0,0,1), inset 0 0 20px var(--gold-glow);
+    border-radius: 4px; margin: 20px auto;
+}
+
+/* 賞金リスト：スマホ(上部5列) vs PC(右横) */
+.reward-sidebar { 
+    list-style: none; padding: 0; margin-bottom: 20px;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+}
+
+@media (min-width: 1150px) {
+    #game-stage { padding: 50px 40px; }
+    .reward-sidebar { 
+        position: absolute; right: -210px; top: 0; 
+        display: block; width: 180px; margin-bottom: 0;
+    }
+    .reward-sidebar li { margin-bottom: 8px; font-size: 0.9rem; padding: 10px; border: 1px solid #222; }
+}
+
+.reward-sidebar li { 
+    color: #444; background: #000; transition: 0.4s; padding: 6px 2px; text-align: center;
+    border: 1px solid #111; font-size: 0.6rem;
+}
+.reward-sidebar li.active { 
+    color: var(--gold-light); font-weight: bold; background: rgba(212, 175, 55, 0.2); 
+    border-color: var(--gold-main); text-shadow: 0 0 8px var(--gold-main);
+    box-shadow: 0 0 15px var(--gold-glow);
+}
+
+/* ライフライン */
+.lifeline-area { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; }
+.lifeline {
+    width: 50px; height: 36px; border: 1px solid var(--gold-main); border-radius: 4px;
+    background: #000; color: var(--gold-light); cursor: pointer; transition: 0.3s;
+}
+.lifeline:hover { box-shadow: 0 0 15px var(--gold-glow); color: white; }
+.lifeline.used { opacity: 0.05; filter: grayscale(1); pointer-events: none; }
+
+/* 問題文：スマホはコンパクト、PCはダイナミック */
+#question-box {
+    border-top: 1px solid var(--gold-dark); border-bottom: 1px solid var(--gold-dark);
+    padding: 30px 10px; font-size: 1.1rem; margin-bottom: 25px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.03), transparent);
+    text-align: center; line-height: 1.6; color: #eee;
+}
+@media (min-width: 600px) {
+    #question-box { font-size: 1.4rem; padding: 40px 20px; }
+}
+
+/* 選択肢ボタン：スマホは1列、PCは2列 */
+.choices-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 600px) { .choices-grid { grid-template-columns: 1fr 1fr; } }
+
+.choice-btn {
+    background: rgba(0,0,0,0.8); border: 1px solid #333; color: #666;
+    padding: 16px; font-size: 0.95rem; cursor: pointer; transition: 0.3s; text-align: left;
+}
+.choice-btn:hover:not(:disabled) { border-color: var(--gold-light); color: white; box-shadow: 0 0 15px var(--gold-glow); }
+.choice-btn.selected { border-color: white; color: white; }
+.choice-btn.correct { border-color: var(--correct) !important; color: var(--correct) !important; text-shadow: 0 0 8px var(--correct); }
+.choice-btn.wrong { border-color: var(--wrong) !important; color: var(--wrong) !important; text-shadow: 0 0 8px var(--wrong); }
+
+/* モーダル：画面中央に完全固定 */
+.overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.98); display: none; 
+    flex-direction: column; justify-content: center; align-items: center; 
+    z-index: 9999; padding: 20px; box-sizing: border-box;
+}
+#res-title { color: var(--gold-main); font-size: clamp(2rem, 10vw, 3.5rem); text-shadow: 0 0 20px var(--gold-dark); margin: 0; }
+.retry-btn { 
+    background: none; border: 1px solid var(--gold-main); color: var(--gold-main); 
+    padding: 15px 50px; cursor:pointer; font-weight:bold; margin-top: 40px; transition: 0.3s;
+}
+.retry-btn:hover { background: var(--gold-main); color: black; box-shadow: 0 0 30px var(--gold-main); }
+
+.stage-back-link {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 12000;
+    padding: 8px 12px;
+    border: 1px solid var(--gold-main);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.72);
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.stage-back-link:hover {
+    color: #fff;
+    box-shadow: 0 0 12px var(--gold-glow);
+}
