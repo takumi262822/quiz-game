@@ -14,6 +14,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 定数概要:
+ * - LEVELS は難易度識別子を統一するコード定義
+ * - LIFELINES はライフラインボタンと処理分岐で使う識別子
+ * - RESULT と LEVEL_LABELS は結果表示や画面文言をそろえる表示定数
+ */
 export class GameDefinitions {
     /** 難易度レベル定義 */
     static LEVELS = Object.freeze({

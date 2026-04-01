@@ -14,6 +14,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 定数概要:
+ * - QUESTION_COUNT と各 DELAY は出題数と画面遷移タイミングの制御値
+ * - SECRET_CLICKS などは CPA 解放演出に使うしきい値
+ * - STANDARD_REWARDS と CPA_REWARDS は難易度別賞金テーブル
+ */
 export class GameConstants {
     // --- 問題数 ---
     static QUESTION_COUNT = 10;

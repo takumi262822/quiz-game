@@ -14,6 +14,12 @@
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 初期化処理: 画面で必要な CSS ファイルの読み込み状況を管理する
+ * - 制御処理: head 要素へ link タグを追加し難易度別スタイルを適用する
+ * - 出力処理: 二重読み込みを防ぎつつ画面表現を安定させる
+ */
 export class StyleManager {
     static #loaded = new Set();
 

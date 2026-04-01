@@ -72,6 +72,12 @@ function showNotice(message, title = 'HINT') {
  * @author Takumi Harada
  * @date 2026-04-01
  */
+/**
+ * 処理概要:
+ * - 初期化処理: 問題データ抽選、ライフライン登録、報酬一覧生成を行う
+ * - 進行処理: 問題表示、回答判定、結果モーダル表示、次問題遷移を制御する
+ * - 出力処理: レベル、問題文、選択肢、報酬演出を画面へ反映する
+ */
 export class QuizManager {
     constructor(data) {
         this.allData = data;

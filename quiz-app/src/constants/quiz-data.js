@@ -12,6 +12,12 @@ import { ELITE_DATA } from './data/elite-data.js';
 import { CPA_DATA } from './data/cpa-data.js';
 
 /**
+ * 定数概要:
+ * - QuizConstants は難易度別問題プールを取得し、ゲーム用の共通形式へ変換する
+ * - data 配下の定数配列は問題文、選択肢、正解値のマスターデータとして参照される
+ */
+
+/**
  * QuizConstants クラス
  * 目的: アプリ全体で再利用する定数・コード定義を管理する
  * 入力: なし（静的参照）
