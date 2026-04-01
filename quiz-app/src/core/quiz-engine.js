@@ -1,4 +1,4 @@
-﻿/**
+/**
  * QuizManager クラス - ゲームエンジン（初級・中級・上級）
  * @author Takumi Harada
  * @date 2026-03-31
@@ -62,6 +62,16 @@ function showNotice(message, title = 'HINT') {
     modal.style.display = 'flex';
 }
 
+/**
+ * QuizManager クラス
+ * 目的: UI部品の生成・更新を担当する
+ * 入力: 表示データ・DOM要素・操作イベント
+ * 処理: 画面要素を生成/更新し必要なイベントを接続する
+ * 出力: 更新されたUI表示
+ * 補足: ビジネスロジックは別クラスに分離する
+ * @author Takumi Harada
+ * @date 2026-04-01
+ */
 export class QuizManager {
     constructor(data) {
         this.allData = data;
@@ -187,6 +197,16 @@ export class QuizManager {
  * QuizEngineCPA クラス - ゲームエンジン（CPA専用 Ruby Horror Edition）
  * @author Takumi Harada
  * @date 2026-03-31
+ */
+/**
+ * QuizEngineCPA クラス
+ * 目的: UI部品の生成・更新を担当する
+ * 入力: 表示データ・DOM要素・操作イベント
+ * 処理: 画面要素を生成/更新し必要なイベントを接続する
+ * 出力: 更新されたUI表示
+ * 補足: ビジネスロジックは別クラスに分離する
+ * @author Takumi Harada
+ * @date 2026-04-01
  */
 export class QuizEngineCPA {
     constructor(data) {

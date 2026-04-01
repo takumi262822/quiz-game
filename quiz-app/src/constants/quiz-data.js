@@ -1,4 +1,4 @@
-﻿/**
+/**
  * QuizConstants クラス - データ集約クラス
  * 各レベルのデータファイルを集約し、ゲームエンジン用フォーマットに変換する
  * ※ 実データは constants/data/ 配下の各ファイルに分離
@@ -11,6 +11,16 @@ import { NORMAL_DATA } from './data/normal-data.js';
 import { ELITE_DATA } from './data/elite-data.js';
 import { CPA_DATA } from './data/cpa-data.js';
 
+/**
+ * QuizConstants クラス
+ * 目的: アプリ全体で再利用する定数・コード定義を管理する
+ * 入力: なし（静的参照）
+ * 処理: 定数を用途別に定義し参照しやすく整理する
+ * 出力: 画面制御や判定で使用する不変値
+ * 補足: 変更時は参照側ロジックの影響を確認する
+ * @author Takumi Harada
+ * @date 2026-04-01
+ */
 export class QuizConstants {
     /**
      * レベルに応じたクイズデータを取得（ゲームエンジン用フォーマットに変換して返す）
