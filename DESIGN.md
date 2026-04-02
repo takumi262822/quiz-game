@@ -50,12 +50,31 @@
 | answer | number | 正解インデックス |
 
 ### 3.2 主な定数
-- GameConstants.QUESTION_COUNT: 出題数
-- GameConstants.STANDARD_DELAY: 回答後の演出待機時間
-- GameConstants.CORRECT_DELAY: 正解時の次問題遷移待機時間
-- GameConstants.LOSE_DELAY: 不正解時の終了待機時間
-- GameConstants.SECRET_CLICKS: CPA ゲート解放クリック数
-- GameDefinitions.LIFELINES: 50:50、TEL、AUDIENCE の識別子
+
+#### GameConstants (quiz-app/src/constants/quiz-constants.js)
+| 定数 | 値 | 用途 |
+|---|---|---|
+| QUESTION_COUNT | 10 | 出題問題数 |
+| STANDARD_DELAY | 1800ms | 通常ステージ正誤判定表示時間 |
+| CORRECT_DELAY | 1200ms | 正解後の次問題遷移待機 |
+| LOSE_DELAY | 800ms | 不正解後のゲームオーバー遷移 |
+| CPA_DELAY | 2500ms | CPA ステージ正誤判定表示時間 |
+| CPA_LOSE_DELAY | 1000ms | CPA 不正解後の遷移 |
+| SECRET_CLICKS | 6 | CPA ゲート解放に必要なクリック数 |
+| RUMBLE_THRESHOLD | 4 | 振動エフェクト開始クリック数 |
+| RESET_TIMEOUT | 1200ms | クリックリセット待機 |
+| UNLOCK_DELAY | 200ms | 解放後ダイアログ表示遅延 |
+
+- STANDARD_REWARDS (通常ステージ賞金テーブル):
+  `["10,000", "20,000", "30,000", "50,000", "100,000", "150,000", "250,000", "500,000", "750,000", "1,000,000"]`
+- CPA_REWARDS (CPA ステージ賞金テーブル):
+  `["10,000", "100,000", "500,000", "1,000,000", "2,000,000", "4,000,000", "6,000,000", "8,000,000", "9,000,000", "10,000,000"]`
+
+#### GameDefinitions (quiz-app/src/constants/definitions.js)
+- LEVELS: `{ BEGINNER: 'beginner', NORMAL: 'normal', ELITE: 'elite', CPA: 'cpa' }`
+- LIFELINES: `{ FIFTY: 'fifty', TEL: 'tel', AUDIENCE: 'aud' }`
+- RESULT: `{ WIN: 'win', LOSE: 'lose' }`
+- LEVEL_LABELS: `{ beginner: 'ビギナー', normal: 'ノーマル', elite: 'エリート', cpa: 'CPA' }`
 
 ## 4. 詳細設計
 
