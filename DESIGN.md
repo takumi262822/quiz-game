@@ -280,3 +280,53 @@
 - 実行環境: Chrome / Edge 最新版、ローカルサーバー経由
 - 品質ゲート: npm run lint、npm test、GitHub Actions CI
 - 制約: 問題データは静的モジュール内に保持し、セッション間保存は行わない
+
+## 6. 入力検証 / セキュリティ実装詳細
+
+### 6.1 Validator クラス
+
+#### 6.1.1 isValidLevel
+- 実装: `Object.values(GameDefinitions.LEVELS).includes(level)`
+- 用途: entry ファイルから渡される難易度値の安全確認
+
+#### 6.1.2 isValidQuizData
+- 実装:
+  1. `Array.isArray(data)`: 配列型確認
+  2. `data.length > 0`: 空配列排除
+- 用途: QuizManager.init() で問題データが用意されているかの事前確認
+
+#### 6.1.3 isValidQuestion
+- 実装:
+  ```
+  q != null
+  && typeof q.question === 'string'
+  && Array.isArray(q.choices)
+  && q.choices.length >= 2
+  && typeof q.answer === 'number'
+  && q.answer >= 0
+  && q.answer < q.choices.length
+  ```
+- 用途: 各問題オブジェクトの構造と answer インデックスの安全性を保証する
+
+### 6.2 XSSProtection クラス
+
+#### 6.2.1 escapeHTML
+- 変換テーブル:
+  - `&` → `&amp;`
+  - `<` → `&lt;`
+  - `>` → `&gt;`
+  - `"` → `&quot;`
+  - `'` → `&#39;`
+  - `/` → `&#x2F;`
+- 実装パターン: `/[&<>"'/]/g` を map 引きで置換
+- 分岐:
+  - a. `str` が falsy または非 string の場合: `''` を返す
+
+#### 6.2.2 safeSetText
+- I/F:
+  - 入力: el (HTMLElement), text (string)
+  - 出力: boolean
+- 実装: `el.textContent = text`
+  - innerHTML でなく textContent を利用することで自動エスケープを保証する
+- 分岐:
+  - a. el が HTMLElement でない場合: false を返す
