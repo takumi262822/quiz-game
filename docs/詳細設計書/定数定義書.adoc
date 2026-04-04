@@ -23,20 +23,20 @@
 
 == 定数一覧
 
-[#定数一覧, title="定数一覧", cols="1,5,3,4,5", options="header", align="center"]
+[#定数一覧, title="定数一覧", cols="1,4,4,3,4,5", options="header", align="center"]
 |===
-^.^|No. ^.^|定数名 ^.^|型 ^.^|設定値 ^.^|備考
+^.^|No. ^.^|定数名（論理名） ^.^|定数名（物理名） ^.^|型 ^.^|設定値 ^.^|備考
 
-^.^|{counter:定数} <.^|GameConstants.QUESTION_COUNT <.^|number <.^|10 <.^|1 ゲームで出題する問題数
-^.^|{counter:定数} <.^|GameConstants.STANDARD_DELAY <.^|number <.^|1800 <.^|通常モード正誤判定待機時間 (ms)
-^.^|{counter:定数} <.^|GameConstants.CORRECT_DELAY <.^|number <.^|1200 <.^|正解後の次問題遷移待機時間 (ms)
-^.^|{counter:定数} <.^|GameConstants.LOSE_DELAY <.^|number <.^|800 <.^|不正解後ゲームオーバー遷移待機時間 (ms)
-^.^|{counter:定数} <.^|GameConstants.CPA_DELAY <.^|number <.^|2500 <.^|CPA モード正誤判定待機時間 (ms)
-^.^|{counter:定数} <.^|GameConstants.CPA_LOSE_DELAY <.^|number <.^|1000 <.^|CPA モード不正解後遷移待機時間 (ms)
-^.^|{counter:定数} <.^|GameConstants.SECRET_CLICKS <.^|number <.^|6 <.^|CPA 解放に必要なタイトルロゴクリック数
-^.^|{counter:定数} <.^|GameConstants.RUMBLE_THRESHOLD <.^|number <.^|4 <.^|振動エフェクト開始クリック数
-^.^|{counter:定数} <.^|GameConstants.RESET_TIMEOUT <.^|number <.^|1200 <.^|クリック累積リセットまでの待機時間 (ms)
-^.^|{counter:定数} <.^|GameConstants.UNLOCK_DELAY <.^|number <.^|200 <.^|解放ダイアログ表示遅延 (ms)
-^.^|{counter:定数} <.^|GameConstants.STANDARD_REWARDS <.^|number[] <.^|[10000, 20000, 30000, 50000, 100000, 150000, 250000, 500000, 750000, 1000000] <.^|通常モード賞金テーブル（問題1〜10）
-^.^|{counter:定数} <.^|GameConstants.CPA_REWARDS <.^|number[] <.^|[10000, 100000, 500000, 1000000, 2000000, 4000000, 6000000, 8000000, 9000000, 10000000] <.^|CPA モード賞金テーブル（問題1〜10）
+^.^|{counter:定数} <.^|出題数 <.^|GameConstants.QUESTION_COUNT <.^|number <.^|10 <.^|1 ゲームで出題する問題数
+^.^|{counter:定数} <.^|通常モード判定待機時間 <.^|GameConstants.STANDARD_DELAY <.^|number <.^|1800 <.^|通常モード正誤判定待機時間 (ms)
+^.^|{counter:定数} <.^|正解後遷移待機時間 <.^|GameConstants.CORRECT_DELAY <.^|number <.^|1200 <.^|正解後の次問題遷移待機時間 (ms)
+^.^|{counter:定数} <.^|不正解後遷移待機時間 <.^|GameConstants.LOSE_DELAY <.^|number <.^|800 <.^|不正解後ゲームオーバー遷移待機時間 (ms)
+^.^|{counter:定数} <.^|CPAモード判定待機時間 <.^|GameConstants.CPA_DELAY <.^|number <.^|2500 <.^|CPA モード正誤判定待機時間 (ms)
+^.^|{counter:定数} <.^|CPAモード不正解後遷移待機時間 <.^|GameConstants.CPA_LOSE_DELAY <.^|number <.^|1000 <.^|CPA モード不正解後遷移待機時間 (ms)
+^.^|{counter:定数} <.^|CPA解放必要クリック数 <.^|GameConstants.SECRET_CLICKS <.^|number <.^|6 <.^|CPA 解放に必要なタイトルロゴクリック数
+^.^|{counter:定数} <.^|振動エフェクト開始クリック数 <.^|GameConstants.RUMBLE_THRESHOLD <.^|number <.^|4 <.^|振動エフェクト開始クリック数
+^.^|{counter:定数} <.^|クリックリセット待機時間 <.^|GameConstants.RESET_TIMEOUT <.^|number <.^|1200 <.^|クリック累積リセットまでの待機時間 (ms)
+^.^|{counter:定数} <.^|解放ダイアログ表示遅延 <.^|GameConstants.UNLOCK_DELAY <.^|number <.^|200 <.^|解放ダイアログ表示遅延 (ms)
+^.^|{counter:定数} <.^|通常モード賞金テーブル <.^|GameConstants.STANDARD_REWARDS <.^|number[] <.^|[10000, 20000, 30000, 50000, 100000, 150000, 250000, 500000, 750000, 1000000] <.^|通常モード賞金テーブル（問題1〜10）
+^.^|{counter:定数} <.^|CPAモード賞金テーブル <.^|GameConstants.CPA_REWARDS <.^|number[] <.^|[10000, 100000, 500000, 1000000, 2000000, 4000000, 6000000, 8000000, 9000000, 10000000] <.^|CPA モード賞金テーブル（問題1〜10）
 |===
