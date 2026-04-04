@@ -1,184 +1,42 @@
-= 定数定義書
-:project: QuizGame
-:author: Takumi Harada
-:revdate: 2026-04-05
-:doctype: article
-:toc:
+= クイズゲーム: 定数一覧
+:lang: ja
+:doctype: book
+:toc: left
+:toclevels: 5
 :toc-title: 目次
 :sectnums:
+:sectnumlevels: 5
+:sectlinks:
+:imagesdir: ./images
+:icons: font
+:source-highlighter: coderay
+:example-caption: 例
+:table-caption: 表
+:figure-caption: 図
 
-== 概要
-
-本書はプロジェクト「{project}」で利用する定数値を列挙したものです。
-ソースファイル `quiz-app/src/constants/quiz-constants.js` から逆引きで抽出しています。
-
----
-
-== 出題数
-
-[cols="2,1,2,4", options="header"]
+[#変更履歴, title="変更履歴", cols="1,2,3,3,3,3,3", options="header", align="center"]
 |===
-|定数名
-|型
-|値
-|内容
+^.^|No. ^.^|版数 ^.^|変更者 <.^|作成日/変更日 <.^|仕変番号/障害番号 <.^|変更箇所 <.^|変更内容
 
-|QUESTION_COUNT
-|number
-|10
-|1 ゲームで出題する問題数
-
+^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026-04-04 ^.^|- ^.^|- |新規作成
 |===
 
----
+== 定数一覧
 
-== タイミング制御（ミリ秒）
-
-[cols="2,1,2,4", options="header"]
+[#定数一覧, title="定数一覧", cols="1,5,3,4,5", options="header", align="center"]
 |===
-|定数名
-|型
-|値
-|内容
+^.^|No. ^.^|定数名 ^.^|型 ^.^|設定値 ^.^|備考
 
-|STANDARD_DELAY
-|number
-|1800
-|通常モードで正誤判定を見せる待機時間 (ms)
-
-|CORRECT_DELAY
-|number
-|1200
-|正解後に次の問題へ遷移するまでの待機時間 (ms)
-
-|LOSE_DELAY
-|number
-|800
-|不正解後にゲームオーバー画面へ遷移するまでの待機時間 (ms)
-
-|CPA_DELAY
-|number
-|2500
-|CPA モードで正誤判定を見せる待機時間 (ms)
-
-|CPA_LOSE_DELAY
-|number
-|1000
-|CPA モードで不正解後の遷移待機時間 (ms)
-
-|===
-
----
-
-== 秘密ゲート（CPA 解放）
-
-[cols="2,1,2,4", options="header"]
-|===
-|定数名
-|型
-|値
-|内容
-
-|SECRET_CLICKS
-|number
-|6
-|CPA 解放に必要なタイトルロゴのクリック数
-
-|RUMBLE_THRESHOLD
-|number
-|4
-|振動エフェクトが開始されるクリック数
-
-|RESET_TIMEOUT
-|number
-|1200
-|クリック累積がリセットされるまでの待機時間 (ms)
-
-|UNLOCK_DELAY
-|number
-|200
-|解放ダイアログを表示するまでの遅延 (ms)
-
-|===
-
----
-
-== 賞金テーブル
-
-=== 通常モード（STANDARD_REWARDS）
-
-[cols="1,2", options="header"]
-|===
-|問題番号
-|賞金
-
-|1
-|10,000
-
-|2
-|20,000
-
-|3
-|30,000
-
-|4
-|50,000
-
-|5
-|100,000
-
-|6
-|150,000
-
-|7
-|250,000
-
-|8
-|500,000
-
-|9
-|750,000
-
-|10
-|1,000,000
-
-|===
-
-=== CPA モード（CPA_REWARDS）
-
-[cols="1,2", options="header"]
-|===
-|問題番号
-|賞金
-
-|1
-|10,000
-
-|2
-|100,000
-
-|3
-|500,000
-
-|4
-|1,000,000
-
-|5
-|2,000,000
-
-|6
-|4,000,000
-
-|7
-|6,000,000
-
-|8
-|8,000,000
-
-|9
-|9,000,000
-
-|10
-|10,000,000
-
+^.^|{counter:定数} <.^|GameConstants.QUESTION_COUNT <.^|number <.^|10 <.^|1 ゲームで出題する問題数
+^.^|{counter:定数} <.^|GameConstants.STANDARD_DELAY <.^|number <.^|1800 <.^|通常モード正誤判定待機時間 (ms)
+^.^|{counter:定数} <.^|GameConstants.CORRECT_DELAY <.^|number <.^|1200 <.^|正解後の次問題遷移待機時間 (ms)
+^.^|{counter:定数} <.^|GameConstants.LOSE_DELAY <.^|number <.^|800 <.^|不正解後ゲームオーバー遷移待機時間 (ms)
+^.^|{counter:定数} <.^|GameConstants.CPA_DELAY <.^|number <.^|2500 <.^|CPA モード正誤判定待機時間 (ms)
+^.^|{counter:定数} <.^|GameConstants.CPA_LOSE_DELAY <.^|number <.^|1000 <.^|CPA モード不正解後遷移待機時間 (ms)
+^.^|{counter:定数} <.^|GameConstants.SECRET_CLICKS <.^|number <.^|6 <.^|CPA 解放に必要なタイトルロゴクリック数
+^.^|{counter:定数} <.^|GameConstants.RUMBLE_THRESHOLD <.^|number <.^|4 <.^|振動エフェクト開始クリック数
+^.^|{counter:定数} <.^|GameConstants.RESET_TIMEOUT <.^|number <.^|1200 <.^|クリック累積リセットまでの待機時間 (ms)
+^.^|{counter:定数} <.^|GameConstants.UNLOCK_DELAY <.^|number <.^|200 <.^|解放ダイアログ表示遅延 (ms)
+^.^|{counter:定数} <.^|GameConstants.STANDARD_REWARDS <.^|number[] <.^|[10000, 20000, 30000, 50000, 100000, 150000, 250000, 500000, 750000, 1000000] <.^|通常モード賞金テーブル（問題1〜10）
+^.^|{counter:定数} <.^|GameConstants.CPA_REWARDS <.^|number[] <.^|[10000, 100000, 500000, 1000000, 2000000, 4000000, 6000000, 8000000, 9000000, 10000000] <.^|CPA モード賞金テーブル（問題1〜10）
 |===
