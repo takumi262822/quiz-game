@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: クイズゲーム データ仕様
+  description: |-
+    THE GRAND MILLIONAIRE はブラウザ上で動作するクイズゲームです。
+    外部 REST API は持たず、localStorage への永続化も行いません。
+    ゲームデータはセッション中のメモリで管理され、ページリロードでリセットされます。
+  version: 1.0.0
+  contact:
+    name: Takumi Harada
+
+servers: []
+
+paths: {}
+
+components:
+  schemas:
+
+    GameSession:
+      type: object
+      description: ゲームセッション中にメモリ上で保持するクイズ進行状態
+      properties:
+        currentIndex:
+          type: integer
+          description: 現在の問題番号 (0始まり)
+          minimum: 0
+          maximum: 9
+        correctCount:
+          type: integer
+          description: 正解数
+          minimum: 0
+          maximum: 10
+        level:
+          type: string
+          description: 選択した難易度
+          enum: [beginner, normal, elite, cpa]
+        prize:
+          type: string
+          description: 現在の獲得賞金 (文字列形式)
+          example: "100,000"
+
+    QuizQuestion:
+      type: object
+      description: 1問分のクイズデータ構造
+      required: [question, choices, answer]
+      properties:
+        question:
+          type: string
+          description: 問題文
+        choices:
+          type: array
+          description: 選択肢 (2件以上)
+          minItems: 2
+          items:
+            type: string
+        answer:
+          type: integer
+          description: 正解の choices インデックス (0始まり)
+          minimum: 0
+
+x-notes:
+  persistence: "localStorage は使用しない。全データはゲームセッション中のメモリで管理。"
+  storage-keys: "なし"
