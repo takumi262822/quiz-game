@@ -49,303 +49,34 @@
 | choices | string[] | 選択肢配列 |
 | answer | number | 正解インデックス |
 
-### 3.2 主な定数
+### 3.2 定数・識別子
 
-#### GameConstants (quiz-app/src/constants/quiz-constants.js)
-| 定数 | 値 | 用途 |
-|---|---|---|
-| QUESTION_COUNT | 10 | 出題問題数 |
-| STANDARD_DELAY | 1800ms | 通常ステージ正誤判定表示時間 |
-| CORRECT_DELAY | 1200ms | 正解後の次問題遷移待機 |
-| LOSE_DELAY | 800ms | 不正解後のゲームオーバー遷移 |
-| CPA_DELAY | 2500ms | CPA ステージ正誤判定表示時間 |
-| CPA_LOSE_DELAY | 1000ms | CPA 不正解後の遷移 |
-| SECRET_CLICKS | 6 | CPA ゲート解放に必要なクリック数 |
-| RUMBLE_THRESHOLD | 4 | 振動エフェクト開始クリック数 |
-| RESET_TIMEOUT | 1200ms | クリックリセット待機 |
-| UNLOCK_DELAY | 200ms | 解放後ダイアログ表示遅延 |
+定数の具体値は `docs/定数定義書.adoc`、識別子の種別値は `docs/コード定義書.adoc` を参照すること。
 
-- STANDARD_REWARDS (通常ステージ賞金テーブル):
-  `["10,000", "20,000", "30,000", "50,000", "100,000", "150,000", "250,000", "500,000", "750,000", "1,000,000"]`
-- CPA_REWARDS (CPA ステージ賞金テーブル):
-  `["10,000", "100,000", "500,000", "1,000,000", "2,000,000", "4,000,000", "6,000,000", "8,000,000", "9,000,000", "10,000,000"]`
+## 4. 設計方針
 
-#### GameDefinitions (quiz-app/src/constants/definitions.js)
-- LEVELS: `{ BEGINNER: 'beginner', NORMAL: 'normal', ELITE: 'elite', CPA: 'cpa' }`
-- LIFELINES: `{ FIFTY: 'fifty', TEL: 'tel', AUDIENCE: 'aud' }`
-- RESULT: `{ WIN: 'win', LOSE: 'lose' }`
-- LEVEL_LABELS: `{ beginner: 'ビギナー', normal: 'ノーマル', elite: 'エリート', cpa: 'CPA' }`
+### 4.1 責務分離
 
-## 4. 詳細設計
+問題進行ロジック（QuizManager / QuizEngineCPA）と UI 描画（UIComponents）を分離し、進行ロジックが DOM 構造に依存しない設計とした。PortalManager は画面遷移のみ担当し、問題データには関与しない。
 
-### 4.1 共通関数
+### 4.2 データ主導
 
-#### 4.1.1 goToPortal
-- I/F:
-  - 入力: なし
-  - 出力: ポータル画面への location.assign
-- 処理:
-  1. PORTAL_PATH を使ってポータル画面へ遷移する。
+問題データは `constants/data/` に難易度別ファイルで分離し、`quiz-data.js` が集約 API を提供する。新難易度の追加はデータファイル 1 枚の追加と `quiz-data.js` への 1 行追記で完結する。
 
-#### 4.1.2 bindPortalActions
-- I/F:
-  - 入力: stage-back リンク、Escape キー
-  - 出力: ポータル復帰イベント登録
-- 処理:
-  1. 戻るリンク押下時にデフォルト遷移を止めて goToPortal() を呼ぶ。
-  2. Escape キー押下時に goToPortal() を呼ぶ。
-- 分岐:
-  - a. stage-back が存在しない場合: リンクイベントは登録しない。
+### 4.3 入力検証
 
-#### 4.1.3 ensureNoticeModal
-- 役割: ヒント表示用の notice-modal が未作成なら生成し、既存ならそれを返す。
+QuizManager.init() は Validator.isValidQuizData() でデータ構造を検証してから抽出処理へ進む。不正データ時は画面にエラーを表示して処理を打ち切る。
 
-#### 4.1.4 showNotice
-- 役割: ヒント用モーダルのタイトルと本文を更新し表示する。
+### 4.4 XSS 対策
 
-#### 4.1.5 showGateDialog
-- I/F:
-  - 入力: 表示メッセージ
-  - 出力: Promise<boolean>
-- 処理:
-  1. gate-modal が無ければ動的生成する。
-  2. OK とキャンセルのイベントを登録する。
-  3. 操作結果を Promise で返す。
-- 分岐:
-  - a. 既存モーダルがある場合: 再生成せず文言だけ差し替える。
-  - b. OK 押下時: true を返す。
-  - c. キャンセル押下時: false を返す。
+UIComponents での動的テキスト挿入には textContent を使用し、innerHTML による XSS を防止する。文字列を画面に表示する際はすべて xss.js を経由してサニタイズする。
 
-### 4.2 PortalManager クラス
+## 5. 関連ドキュメント
 
-#### 4.2.1 constructor
-- I/F:
-  - 入力: body、logo、secret-trigger
-  - 出力: 初期化済み PortalManager
-- 処理:
-  1. クリック数とタイマーを初期化する。
-  2. 必要 DOM を取得する。
-  3. init() を呼んで秘密トリガーを有効化する。
-
-#### 4.2.2 init
-- 役割: secret-trigger の click を handleSecretClick() へ接続する。
-
-#### 4.2.3 handleSecretClick
-- I/F:
-  - 入力: 現在クリック回数
-  - 出力: 演出状態または CPA ゲート解放
-- 処理:
-  1. clicks を加算する。
-  2. resetTimer() で一定時間後リセットを予約する。
-  3. 規定回数なら unlockSecret()、途中段階なら applyRumble() を呼ぶ。
-- 分岐:
-  - a. clicks === SECRET_CLICKS: 解放処理へ進む。
-  - b. clicks >= RUMBLE_THRESHOLD: ロゴ揺れ演出を適用する。
-
-#### 4.2.4 applyRumble
-- 役割: クリック数に応じて logo の拡大率と text-shadow を強める。
-
-#### 4.2.5 unlockSecret
-- I/F:
-  - 入力: 解放済み演出状態
-  - 出力: CPA ステージ遷移またはポータル再読込
-- 処理:
-  1. clearState() で中間演出を初期化する。
-  2. ロゴ表記を CPA ACCESS に変更する。
-  3. 一定時間後に showGateDialog() を表示する。
-  4. 承認時は cpa.html へ遷移する。
-  5. キャンセル時は window.location.reload() を行う。
-- 分岐:
-  - a. ダイアログ承認時: 隠しステージへ進む。
-  - b. キャンセル時: ポータル状態を初期化する。
-
-#### 4.2.6 resetTimer
-- 役割: 連続クリック判定用タイマーを張り直し、無操作時に clearState() を呼ぶ。
-
-#### 4.2.7 clearState
-- 役割: click 数、body class、logo の transform と shadow を初期状態へ戻す。
-
-### 4.3 QuizManager クラス
-
-#### 4.3.1 constructor
-- I/F:
-  - 入力: allData
-  - 出力: selected、current、DOM 参照を持つインスタンス
-- 設定値:
-  - REWARDS: STANDARD_REWARDS
-- 処理:
-  1. 全問題データを保持する。
-  2. selected、current、isWait を初期化する。
-  3. レベル表示、問題文、選択肢、報酬、モーダルの DOM を取得する。
-
-#### 4.3.2 bindUIActions
-- I/F:
-  - 入力: ライフラインボタン、retry-btn、stage-back、Escape キー
-  - 出力: UI イベント登録
-- 処理:
-  1. bindPortalActions() により戻るリンクと Escape 復帰を登録する。
-  2. ライフラインボタンへ useLife() を登録する。
-  3. retry-btn へ reload を登録する。
-- 分岐:
-  - a. ボタンが存在しない場合: そのイベントは登録しない。
-
-#### 4.3.3 init
-- I/F:
-  - 入力: allData
-  - 出力: selected 問題配列、初回描画
-- 処理:
-  1. Validator.isValidQuizData() で問題データを検証する。
-  2. ランダム抽出で出題問題を QUESTION_COUNT 件に絞る。
-  3. 報酬一覧を描画する。
-  4. render() を実行する。
-- 分岐:
-  - a. 問題データが不正な場合: 画面へデータなしメッセージを表示する。
-
-#### 4.3.4 render
-- I/F:
-  - 入力: current、selected
-  - 出力: レベル表示、問題文、選択肢 DOM 更新
-- 処理:
-  1. isWait を false に戻す。
-  2. 現在問題を取得する。
-  3. レベル表示と問題文を更新する。
-  4. reward-list のハイライトを更新する。
-  5. choice ボタンを再生成し、各ボタンから check() を呼び出せるようにする。
-
-#### 4.3.5 check
-- I/F:
-  - 入力: 選択ボタン、選択インデックス
-  - 出力: 正誤演出、次問題遷移、終了モーダル
-- 処理:
-  1. 多重入力防止のため isWait を確認する。
-  2. STANDARD_DELAY 後に正解インデックスと比較する。
-  3. 正解なら current を進め、残問題があれば render()、なければ finish(true) を呼ぶ。
-  4. 不正解なら wrong 表示と正解強調を行い、finish(false) を呼ぶ。
-- 分岐:
-  - a. isWait が true: 二重判定を行わず終了する。
-  - b. index === correct: 正解ルートへ進む。
-  - c. index !== correct: 失敗ルートへ進む。
-  - d. current < QUESTION_COUNT: 次問題を描画する。
-  - e. それ以外: クリアモーダルを表示する。
-
-#### 4.3.6 useLife
-- I/F:
-  - 入力: ライフライン種別
-  - 出力: 選択肢非表示またはヒントモーダル表示
-- 処理:
-  1. 使用済みか待機中かを確認する。
-  2. ボタンを used 状態にする。
-  3. 正解選択肢を取得する。
-  4. FIFTY の場合は誤答 2 件を非表示にする。
-  5. TEL / AUDIENCE の場合は showNotice() でヒントを出す。
-- 分岐:
-  - a. isWait または used 状態: 再使用しない。
-  - b. type === FIFTY: 選択肢を減らす。
-  - c. それ以外: テキストヒントを表示する。
-
-#### 4.3.7 finish
-- 役割: クリア時と失敗時で異なるタイトル・本文を result-modal へ表示する。
-
-### 4.4 QuizEngineCPA クラス
-
-#### 4.4.1 constructor
-- 役割: QuizManager と同様の状態を持ちつつ、CPA_REWARDS を使う。
-
-#### 4.4.2 bindUIActions
-- 役割: ポータル復帰、ライフライン、リトライのイベントを登録する。
-- 分岐:
-  - a. ライフライン押下時に isWait または used なら何もしない。
-
-#### 4.4.3 start
-- 役割: 問題データを検証し、QUESTION_COUNT 件へ抽出して初回描画する。
-- 分岐:
-  - a. 問題データ不正時: データなし表示にする。
-
-#### 4.4.4 render
-- 役割: CPA EXAM 表記と専用報酬一覧で現在問題を描画する。
-
-#### 4.4.5 check
-- I/F:
-  - 入力: 選択ボタン、選択インデックス
-  - 出力: CPA 用の正誤演出、終了モーダル
-- 処理:
-  1. CPA_DELAY 後に正誤判定を行う。
-  2. 正解時は current を進め、残問題があれば render()、なければ finish(true) を呼ぶ。
-  3. 不正解時は wrong 表示後、CPA_LOSE_DELAY で finish(false) を呼ぶ。
-- 分岐:
-  - a. isWait が true: 多重入力を防止する。
-  - b. 正解時: 次問題または合格表示へ進む。
-  - c. 不正解時: 不合格表示へ進む。
-
-#### 4.4.6 useLife
-- 役割: FIFTY、ADVICE、AUDIENCE の CPA 専用文言を出し分ける。
-- 分岐:
-  - a. FIFTY: 誤答 2 件を非表示にする。
-  - b. TEL: シニアパートナー文言を表示する。
-  - c. AUDIENCE: 受験生反応文言を表示する。
-
-#### 4.4.7 finish
-- 役割: PASSED / FAILED の専用モーダルを表示する。
-
-### 4.5 Validator / QuizConstants
-
-#### 4.5.1 Validator.isValidQuizData
-- 役割: 問題配列の存在、要素構造、answer の妥当性を検証する。
-
-#### 4.5.2 QuizConstants.getQuizData
-- 役割: 難易度識別子に応じて問題セットを返す。
-
-## 5. 非機能要件
-- 実行環境: Chrome / Edge 最新版、ローカルサーバー経由
-- 品質ゲート: npm run lint、npm test、GitHub Actions CI
-- 制約: 問題データは静的モジュール内に保持し、セッション間保存は行わない
-
-## 6. 入力検証 / セキュリティ実装詳細
-
-### 6.1 Validator クラス
-
-#### 6.1.1 isValidLevel
-- 実装: `Object.values(GameDefinitions.LEVELS).includes(level)`
-- 用途: entry ファイルから渡される難易度値の安全確認
-
-#### 6.1.2 isValidQuizData
-- 実装:
-  1. `Array.isArray(data)`: 配列型確認
-  2. `data.length > 0`: 空配列排除
-- 用途: QuizManager.init() で問題データが用意されているかの事前確認
-
-#### 6.1.3 isValidQuestion
-- 実装:
-  ```
-  q != null
-  && typeof q.question === 'string'
-  && Array.isArray(q.choices)
-  && q.choices.length >= 2
-  && typeof q.answer === 'number'
-  && q.answer >= 0
-  && q.answer < q.choices.length
-  ```
-- 用途: 各問題オブジェクトの構造と answer インデックスの安全性を保証する
-
-### 6.2 XSSProtection クラス
-
-#### 6.2.1 escapeHTML
-- 変換テーブル:
-  - `&` → `&amp;`
-  - `<` → `&lt;`
-  - `>` → `&gt;`
-  - `"` → `&quot;`
-  - `'` → `&#39;`
-  - `/` → `&#x2F;`
-- 実装パターン: `/[&<>"'/]/g` を map 引きで置換
-- 分岐:
-  - a. `str` が falsy または非 string の場合: `''` を返す
-
-#### 6.2.2 safeSetText
-- I/F:
-  - 入力: el (HTMLElement), text (string)
-  - 出力: boolean
-- 実装: `el.textContent = text`
-  - innerHTML でなく textContent を利用することで自動エスケープを保証する
-- 分岐:
-  - a. el が HTMLElement でない場合: false を返す
+| ドキュメント | 内容 |
+|---|---|
+| README.md | プロジェクト概要・実行手順 |
+| SCREEN-OVERVIEW.md | 画面構成・遷移・UI 説明 |
+| docs/機能設計書.adoc | クラス・メソッド・分岐単位の詳細仕様 |
+| docs/コード定義書.adoc | 識別子・種別コードの定義 |
+| docs/定数定義書.adoc | 定数値・設定値一覧 |

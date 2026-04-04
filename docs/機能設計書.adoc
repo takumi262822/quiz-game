@@ -106,6 +106,80 @@
 
 |===
 
+=== QuizEngineCPA（quiz-engine.js）
+
+CPA ステージ専用の進行クラス。QuizManager と同構造だが CPA_REWARDS・CPA_DELAY を使用し、専用モーダル文言を持つ。
+
+[cols="2,1,4", options="header"]
+|===
+|メソッド
+|可視性
+|処理内容
+
+|constructor(data)
+|public
+|問題データを受け取り、REWARDS を GameConstants.CPA_REWARDS で初期化する
+
+|bindUIActions()
+|public
+|ポータル戻りリンク・ESC キー・ライフラインボタンのイベントを登録する
+
+|start()
+|public
+|問題データをシャッフルして QUESTION_COUNT 件抽出し、初回描画する
+
+|render()
+|public
+|「CPA EXAM」表記と CPA 専用賞金リストで現在問題を描画する
+
+|check(btn, index)
+|public
+|CPA_DELAY 後に正誤判定を行い、正解なら次問または finish(true)、不正解なら finish(false) を呼ぶ
+
+|useLife(id)
+|public
+|FIFTY・ADVICE・AUDIENCE の CPA 専用文言を出し分ける
+
+|finish(isWin)
+|public
+|PASSED / FAILED の CPA 専用モーダルを表示する
+
+|===
+
+=== PortalManager（main.js）
+
+[cols="2,1,4", options="header"]
+|===
+|メソッド
+|可視性
+|処理内容
+
+|constructor()
+|public
+|クリック数・タイマーを初期化し、secret-trigger の click イベントを登録する
+
+|handleSecretClick()
+|public
+|clicks を加算し、RUMBLE_THRESHOLD 以上なら applyRumble()、SECRET_CLICKS に達したら unlockSecret() を呼ぶ
+
+|applyRumble()
+|private
+|クリック数に比例して logo の拡大率と text-shadow を強める
+
+|unlockSecret()
+|private
+|CPA ACCESS 表示後に showGateDialog() を表示し、承認なら cpa.html へ遷移、キャンセルなら reload() する
+
+|resetTimer()
+|private
+|RESET_TIMEOUT ms 操作がなければ clearState() を呼ぶタイマーを張り直す
+
+|clearState()
+|private
+|クリック数・body class・logo のスタイルを初期状態へ戻す
+
+|===
+
 ---
 
 == ゲーム進行フロー
