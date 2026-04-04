@@ -1,0 +1,115 @@
+= コード定義書
+:project: QuizGame
+:author: Takumi Harada
+:revdate: 2026-04-05
+:doctype: article
+:toc:
+:toc-title: 目次
+:sectnums:
+
+== 概要
+
+本書はプロジェクト「{project}」に登場するコード値（識別子・種別値）を列挙したものです。
+ソースファイル `quiz-app/src/constants/definitions.js` から逆引きで抽出しています。
+
+---
+
+== 難易度コード（GameDefinitions.LEVELS）
+
+ファイル: `quiz-app/src/constants/definitions.js`
+
+[cols="2,2,4", options="header"]
+|===
+|定数名
+|コード値
+|説明
+
+|LEVELS.BEGINNER
+|'beginner'
+|初級難易度。基礎問題中心
+
+|LEVELS.NORMAL
+|'normal'
+|通常難易度。応用問題を含む
+
+|LEVELS.ELITE
+|'elite'
+|上級難易度。難問・専門問題中心
+
+|LEVELS.CPA
+|'cpa'
+|CPA 特別難易度。秘密ゲートから解放される隠し
+
+|===
+
+---
+
+== ライフライン種別コード（GameDefinitions.LIFELINES）
+
+[cols="2,2,4", options="header"]
+|===
+|定数名
+|コード値
+|説明
+
+|LIFELINES.FIFTY
+|'fifty'
+|50:50 ライフライン。誤答選択肢を 2 つ除外する
+
+|LIFELINES.TEL
+|'tel'
+|テレフォン。特定ヒントを表示する
+
+|LIFELINES.AUDIENCE
+|'aud'
+|オーディエンス投票。ヒントモーダルを表示する
+
+|===
+
+---
+
+== ゲーム結果コード（GameDefinitions.RESULT）
+
+[cols="2,2,4", options="header"]
+|===
+|定数名
+|コード値
+|説明
+
+|RESULT.WIN
+|'win'
+|全問正解でゲームクリア
+
+|RESULT.LOSE
+|'lose'
+|不正解でゲームオーバー
+
+|===
+
+---
+
+== レベル表示ラベル（GameDefinitions.LEVEL_LABELS）
+
+[cols="2,2,4", options="header"]
+|===
+|コードキー
+|表示値
+|用途
+
+|beginner
+|ビギナー
+|ポータル画面・難易度表示に使用
+
+|normal
+|ノーマル
+|ポータル画面・難易度表示に使用
+
+|elite
+|エリート
+|ポータル画面・難易度表示に使用
+
+|cpa
+|CPA
+|解放後のポータル画面に表示
+
+|===
