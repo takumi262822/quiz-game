@@ -63,20 +63,7 @@ function showNotice(message, title = 'HINT') {
 }
 
 /**
- * QuizManager クラス
- * 目的: UI部品の生成・更新を担当する
- * 入力: 表示データ・DOM要素・操作イベント
- * 処理: 画面要素を生成/更新し必要なイベントを接続する
- * 出力: 更新されたUI表示
- * 補足: ビジネスロジックは別クラスに分離する
- * @author Takumi Harada
- * @date 2026-04-01
- */
-/**
- * 処理概要:
- * - 初期化処理: 問題データ抽選、ライフライン登録、報酬一覧生成を行う
- * - 進行処理: 問題表示、回答判定、結果モーダル表示、次問題遷移を制御する
- * - 出力処理: レベル、問題文、選択肢、報酬演出を画面へ反映する
+ * 問題進行・回答判定・ライフライン管理を扱うクラス（初級・通常・上級共通）。
  */
 export class QuizManager {
     constructor(data) {
@@ -200,19 +187,7 @@ export class QuizManager {
 }
 
 /**
- * QuizEngineCPA クラス - ゲームエンジン（CPA専用 Ruby Horror Edition）
- * @author Takumi Harada
- * @date 2026-03-31
- */
-/**
- * QuizEngineCPA クラス
- * 目的: UI部品の生成・更新を担当する
- * 入力: 表示データ・DOM要素・操作イベント
- * 処理: 画面要素を生成/更新し必要なイベントを接続する
- * 出力: 更新されたUI表示
- * 補足: ビジネスロジックは別クラスに分離する
- * @author Takumi Harada
- * @date 2026-04-01
+ * CPA ステージ専用の問題進行クラス。CPA_REWARDS と CPA_DELAY を使用する。
  */
 export class QuizEngineCPA {
     constructor(data) {
