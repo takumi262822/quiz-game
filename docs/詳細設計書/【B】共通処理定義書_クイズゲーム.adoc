@@ -21,6 +21,7 @@
 ^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026/3/31 ^.^|- |新規作成
 ^.^|{counter:変更履歴} |1.01 |Takumi Harada |2026/4/5 <.^|全体 <.^|ファイル名変更・書式統一（格納先・説明・変更履歴）
 ^.^|{counter:変更履歴} |1.02 |Takumi Harada |2026/4/5 <.^|全体 <.^|引数と戻り値を入力項目・出力項目の表に分割
+^.^|{counter:変更履歴} |1.03 |Takumi Harada |2026/4/5 <.^|全体 <.^|出力項目テーブルに「戻り値」列を追加
 |===
 
 == 概要
@@ -54,11 +55,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|string |`& < > " ' /` を HTML エンティティに置換した文字列
+<.^|戻り値 |string |`& < > " ' /` を HTML エンティティに置換した文字列
 |===
 
 .変換表
@@ -87,11 +88,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`el.textContent` に代入して XSS を防ぐ。無効な要素の場合は `false` を返す
+<.^|戻り値 |boolean |`el.textContent` に代入して XSS を防ぐ。無効な要素の場合は `false` を返す
 |===
 
 ---
@@ -109,11 +110,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |一時 div で解析し、`<script>` と `on*` ハンドラを除去してから `innerHTML` に設定する。失敗時は `false`
+<.^|戻り値 |boolean |一時 div で解析し、`<script>` と `on*` ハンドラを除去してから `innerHTML` に設定する。失敗時は `false`
 |===
 
 ---
@@ -129,11 +130,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`http:` `https:` `mailto:` `tel:` または相対パスのみ `true`
+<.^|戻り値 |boolean |`http:` `https:` `mailto:` `tel:` または相対パスのみ `true`
 |===
 
 ---
@@ -150,11 +151,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`isSafeURL` で検証後に `el.href` を設定する。不正な URL なら `false` を返す
+<.^|戻り値 |boolean |`isSafeURL` で検証後に `el.href` を設定する。不正な URL なら `false` を返す
 |===
 
 ---
@@ -170,11 +171,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|object\|null |`JSON.parse` をラップし、パース失敗時は `null` を返す
+<.^|戻り値 |object\|null |`JSON.parse` をラップし、パース失敗時は `null` を返す
 |===
 
 ---
@@ -191,11 +192,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`el.className` に安全なクラス名を設定する。失敗時は `false`
+<.^|戻り値 |boolean |`el.className` に安全なクラス名を設定する。失敗時は `false`
 |===
 
 ---
@@ -223,11 +224,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`GameDefinitions.LEVELS` の値に含まれるか確認した結果
+<.^|戻り値 |boolean |`GameDefinitions.LEVELS` の値に含まれるか確認した結果
 |===
 
 ---
@@ -243,11 +244,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`Array.isArray(data) && data.length > 0` の確認結果
+<.^|戻り値 |boolean |`Array.isArray(data) && data.length > 0` の確認結果
 |===
 
 ---
@@ -263,11 +264,11 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|boolean |`question`（string）・`choices`（Array, 2件以上）・`answer`（number, 範囲内）の複合チェック結果
+<.^|戻り値 |boolean |`question`（string）・`choices`（Array, 2件以上）・`answer`（number, 範囲内）の複合チェック結果
 |===
 
 ---
@@ -313,30 +314,26 @@ NOTE: ヘッダー要素とタイトル `<h1>` を生成して内部保持する
 |===
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|this |`<h1>` テキストを更新してメソッドチェーンを返す
+<.^|戻り値 |this |`<h1>` テキストを更新してメソッドチェーンを返す
 |===
 
 ---
 
 ==== attach()
 
-[cols="2,2,4", options="header"]
-|===
-^.^|項目 ^.^|型 <.^|内容
-
 .入力項目
 なし
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|this |`root.prepend` で DOM 先頭に挿入してメソッドチェーンを返す
+<.^|戻り値 |this |`root.prepend` で DOM 先頭に挿入してメソッドチェーンを返す
 |===
 
 ---
@@ -372,19 +369,15 @@ NOTE: `<footer>` 要素にコピーライト文字列を設定して内部保持
 
 ==== attach()
 
-[cols="2,2,4", options="header"]
-|===
-^.^|項目 ^.^|型 <.^|内容
-
 .入力項目
 なし
 
 .出力項目
-[cols="2,4", options="header"]
+[cols="2,2,4", options="header"]
 |===
-^.^|型 <.^|内容
+^.^|戻り値 ^.^|型 <.^|内容
 
-|this |`root.append` で DOM 末尾に挿入してメソッドチェーンを返す
+<.^|戻り値 |this |`root.append` で DOM 末尾に挿入してメソッドチェーンを返す
 |===
 
 NOTE: コピーライト表記: `© 2026 THE GRAND MILLIONAIRE. All Rights Reserved.`
