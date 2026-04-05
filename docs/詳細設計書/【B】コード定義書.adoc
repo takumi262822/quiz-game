@@ -1,4 +1,4 @@
-= コード定義書
+﻿= コード定義書
 :project: QuizGame
 :author: Takumi Harada
 :revdate: 2026-04-05
@@ -10,106 +10,130 @@
 == 概要
 
 本書はプロジェクト「{project}」に登場するコード値（識別子・種別値）を列挙したものです。
-ソースファイル `quiz-app/src/constants/definitions.js` から逆引きで抽出しています。
+ソースファイル quiz-app/src/constants/definitions.js から逆引きで抽出しています。
 
 ---
 
-== 難易度コード（GameDefinitions.LEVELS）
+== 難易度コード（LEVELS）
 
-ファイル: `quiz-app/src/constants/definitions.js`
+ファイル: quiz-app/src/constants/definitions.js
 
-[cols="2,2,4", options="header"]
+[cols="1,3,3,2,1,4,3", options="header"]
 |===
-|定数名
-|コード値
+|項番
+|コード和名
+|コード英名
+|データ型
+|桁数
 |説明
+|記述形式
 
-|LEVELS.BEGINNER
-|'beginner'
-|初級難易度。基礎問題中心
-
-|LEVELS.NORMAL
-|'normal'
-|通常難易度。応用問題を含む
-
-|LEVELS.ELITE
-|'elite'
-|上級難易度。難問・専門問題中心
-
-|LEVELS.CPA
-|'cpa'
-|CPA 特別難易度。秘密ゲートから解放される隠し
-
-|===
-
----
-
-== ライフライン種別コード（GameDefinitions.LIFELINES）
-
-[cols="2,2,4", options="header"]
-|===
-|定数名
-|コード値
-|説明
-
-|LIFELINES.FIFTY
-|'fifty'
-|50:50 ライフライン。誤答選択肢を 2 つ除外する
-
-|LIFELINES.TEL
-|'tel'
-|テレフォン。特定ヒントを表示する
-
-|LIFELINES.AUDIENCE
-|'aud'
-|オーディエンス投票。ヒントモーダルを表示する
-
-|===
-
----
-
-== ゲーム結果コード（GameDefinitions.RESULT）
-
-[cols="2,2,4", options="header"]
-|===
-|定数名
-|コード値
-|説明
-
-|RESULT.WIN
-|'win'
-|全問正解でゲームクリア
-
-|RESULT.LOSE
-|'lose'
-|不正解でゲームオーバー
-
-|===
-
----
-
-== レベル表示ラベル（GameDefinitions.LEVEL_LABELS）
-
-[cols="2,2,4", options="header"]
-|===
-|コードキー
-|表示値
-|用途
-
+|1
+|初級
 |beginner
-|ビギナー
-|ポータル画面・難易度表示に使用
+|文字型
+|8
+|初級難易度。基礎問題中心
+|半角英小文字
 
+|2
+|通常
 |normal
-|ノーマル
-|ポータル画面・難易度表示に使用
+|文字型
+|6
+|通常難易度。応用問題を含む
+|半角英小文字
 
+|3
+|上級
 |elite
-|エリート
-|ポータル画面・難易度表示に使用
+|文字型
+|5
+|上級難易度。難問・専門問題中心
+|半角英小文字
 
-|cpa
+|4
 |CPA
-|解放後のポータル画面に表示
+|cpa
+|文字型
+|3
+|CPA 特別難易度。秘密ゲートから解放される隠しモード
+|半角英小文字
+
+|===
+
+---
+
+== ライフライン種別コード（LIFELINES）
+
+ファイル: quiz-app/src/constants/definitions.js
+
+[cols="1,3,3,2,1,4,3", options="header"]
+|===
+|項番
+|コード和名
+|コード英名
+|データ型
+|桁数
+|説明
+|記述形式
+
+|1
+|50:50
+|fifty
+|文字型
+|5
+|誤答選択肢を2つ除外するライフライン
+|半角英小文字
+
+|2
+|テレフォン
+|tel
+|文字型
+|3
+|特定ヒントを表示するライフライン
+|半角英小文字
+
+|3
+|オーディエンス
+|aud
+|文字型
+|3
+|ヒントモーダルを表示するライフライン
+|半角英小文字
+
+|===
+
+---
+
+== ゲーム結果コード（RESULT）
+
+ファイル: quiz-app/src/constants/definitions.js
+
+[cols="1,3,3,2,1,4,3", options="header"]
+|===
+|項番
+|コード和名
+|コード英名
+|データ型
+|桁数
+|説明
+|記述形式
+
+|1
+|クリア
+|win
+|文字型
+|3
+|全問正解でゲームクリアした状態
+|半角英小文字
+
+|2
+|ゲームオーバー
+|lose
+|文字型
+|4
+|不正解でゲームオーバーになった状態
+|半角英小文字
 
 |===
