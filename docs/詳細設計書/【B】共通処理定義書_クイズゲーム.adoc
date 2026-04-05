@@ -20,6 +20,7 @@
 
 ^.^|{counter:変更履歴} |1.00 |Takumi Harada |2026/3/31 ^.^|- |新規作成
 ^.^|{counter:変更履歴} |1.01 |Takumi Harada |2026/4/5 <.^|全体 <.^|ファイル名変更・書式統一（格納先・説明・変更履歴）
+^.^|{counter:変更履歴} |1.02 |Takumi Harada |2026/4/5 <.^|全体 <.^|引数と戻り値を入力項目・出力項目の表に分割
 |===
 
 == 概要
@@ -44,12 +45,20 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 ==== escapeHTML(str)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `str` |string |任意の値。`null` / 非文字列は空文字を返す。
-<.^|戻り値 |string |`& < > " ' /` を HTML エンティティに置換した文字列
+<.^|`str` |string |任意の値。`null` / 非文字列は空文字を返す。
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|string |`& < > " ' /` を HTML エンティティに置換した文字列
 |===
 
 .変換表
@@ -68,77 +77,125 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 ==== safeSetText(el, text)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `el` |HTMLElement |テキストをセットする対象要素
-<.^|引数 `text` |string |セットするテキスト内容
-<.^|戻り値 |boolean |`el.textContent` に代入して XSS を防ぐ。無効な要素の場合は `false` を返す
+<.^|`el` |HTMLElement |テキストをセットする対象要素
+<.^|`text` |string |セットするテキスト内容
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`el.textContent` に代入して XSS を防ぐ。無効な要素の場合は `false` を返す
 |===
 
 ---
 
 ==== safeSetHTML(el, html, allowedTags)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `el` |HTMLElement |HTML をセットする対象要素
-<.^|引数 `html` |string |セットする HTML 文字列
-<.^|引数 `allowedTags` |string[] |許可するタグ名の配列。デフォルト: `b i em strong br p`
-<.^|戻り値 |boolean |一時 div で解析し、`<script>` と `on*` ハンドラを除去してから `innerHTML` に設定する。失敗時は `false`
+<.^|`el` |HTMLElement |HTML をセットする対象要素
+<.^|`html` |string |セットする HTML 文字列
+<.^|`allowedTags` |string[] |許可するタグ名の配列。デフォルト: `b i em strong br p`
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |一時 div で解析し、`<script>` と `on*` ハンドラを除去してから `innerHTML` に設定する。失敗時は `false`
 |===
 
 ---
 
 ==== isSafeURL(url)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `url` |string |検証対象の URL 文字列
-<.^|戻り値 |boolean |`http:` `https:` `mailto:` `tel:` または相対パスのみ `true`
+<.^|`url` |string |検証対象の URL 文字列
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`http:` `https:` `mailto:` `tel:` または相対パスのみ `true`
 |===
 
 ---
 
 ==== setSafeHref(el, href)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `el` |HTMLElement |`href` をセットする対象要素
-<.^|引数 `href` |string |セットする URL 文字列
-<.^|戻り値 |boolean |`isSafeURL` で検証後に `el.href` を設定する。不正な URL なら `false` を返す
+<.^|`el` |HTMLElement |`href` をセットする対象要素
+<.^|`href` |string |セットする URL 文字列
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`isSafeURL` で検証後に `el.href` を設定する。不正な URL なら `false` を返す
 |===
 
 ---
 
 ==== safeJSONParse(jsonStr)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `jsonStr` |string |パース対象の JSON 文字列
-<.^|戻り値 |object\|null |`JSON.parse` をラップし、パース失敗時は `null` を返す
+<.^|`jsonStr` |string |パース対象の JSON 文字列
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|object\|null |`JSON.parse` をラップし、パース失敗時は `null` を返す
 |===
 
 ---
 
 ==== safeSetClass(el, className)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `el` |HTMLElement |クラス名をセットする対象要素
-<.^|引数 `className` |string |セットするクラス名
-<.^|戻り値 |boolean |`el.className` に安全なクラス名を設定する。失敗時は `false`
+<.^|`el` |HTMLElement |クラス名をセットする対象要素
+<.^|`className` |string |セットするクラス名
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`el.className` に安全なクラス名を設定する。失敗時は `false`
 |===
 
 ---
@@ -157,36 +214,60 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 ==== isValidLevel(level)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `level` |string |検査対象のレベル値
-<.^|戻り値 |boolean |`GameDefinitions.LEVELS` の値に含まれるか確認した結果
+<.^|`level` |string |検査対象のレベル値
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`GameDefinitions.LEVELS` の値に含まれるか確認した結果
 |===
 
 ---
 
 ==== isValidQuizData(data)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `data` |any |検査対象のクイズデータ
-<.^|戻り値 |boolean |`Array.isArray(data) && data.length > 0` の確認結果
+<.^|`data` |any |検査対象のクイズデータ
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`Array.isArray(data) && data.length > 0` の確認結果
 |===
 
 ---
 
 ==== isValidQuestion(q)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `q` |object |検査対象の問題オブジェクト
-<.^|戻り値 |boolean |`question`（string）・`choices`（Array, 2件以上）・`answer`（number, 範囲内）の複合チェック結果
+<.^|`q` |object |検査対象の問題オブジェクト
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|boolean |`question`（string）・`choices`（Array, 2件以上）・`answer`（number, 範囲内）の複合チェック結果
 |===
 
 ---
@@ -205,25 +286,38 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 ==== constructor(root, title)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `root` |Element |ヘッダーを挿入する親要素
-<.^|引数 `title` |string |ヘッダーに表示するタイトル
-<.^|戻り値 |- |ヘッダー要素とタイトル `<h1>` を生成して内部保持する
+<.^|`root` |Element |ヘッダーを挿入する親要素
+<.^|`title` |string |ヘッダーに表示するタイトル
 |===
+
+.出力項目
+なし
+
+NOTE: ヘッダー要素とタイトル `<h1>` を生成して内部保持する。
 
 ---
 
 ==== setTitle(title)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `title` |string |更新後のタイトル文字列
-<.^|戻り値 |this |`<h1>` テキストを更新してメソッドチェーンを返す
+<.^|`title` |string |更新後のタイトル文字列
+|===
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|this |`<h1>` テキストを更新してメソッドチェーンを返す
 |===
 
 ---
@@ -234,8 +328,15 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 ^.^|項目 ^.^|型 <.^|内容
 
-<.^|引数 |- |-
-<.^|戻り値 |this |`root.prepend` で DOM 先頭に挿入してメソッドチェーンを返す
+.入力項目
+なし
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|this |`root.prepend` で DOM 先頭に挿入してメソッドチェーンを返す
 |===
 
 ---
@@ -254,13 +355,18 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 
 ==== constructor(root)
 
+.入力項目
 [cols="2,2,4", options="header"]
 |===
-^.^|項目 ^.^|型 <.^|内容
+^.^|引数 ^.^|型 <.^|内容
 
-<.^|引数 `root` |Element |フッターを挿入する親要素
-<.^|戻り値 |- |`<footer>` 要素にコピーライト文字列を設定して内部保持する
+<.^|`root` |Element |フッターを挿入する親要素
 |===
+
+.出力項目
+なし
+
+NOTE: `<footer>` 要素にコピーライト文字列を設定して内部保持する。
 
 ---
 
@@ -270,8 +376,15 @@ DOM への文字列反映前に HTML 特殊文字をエスケープし、XSS 攻
 |===
 ^.^|項目 ^.^|型 <.^|内容
 
-<.^|引数 |- |-
-<.^|戻り値 |this |`root.append` で DOM 末尾に挿入してメソッドチェーンを返す
+.入力項目
+なし
+
+.出力項目
+[cols="2,4", options="header"]
+|===
+^.^|型 <.^|内容
+
+|this |`root.append` で DOM 末尾に挿入してメソッドチェーンを返す
 |===
 
 NOTE: コピーライト表記: `© 2026 THE GRAND MILLIONAIRE. All Rights Reserved.`
