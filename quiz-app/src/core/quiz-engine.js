@@ -21,6 +21,7 @@ function bindPortalActions() {
         goToPortal();
     });
 
+    // Escape キーでもポータルに戻れる（キーボード操作の便宜性を落とさないため）
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             goToPortal();
@@ -106,6 +107,7 @@ export class QuizManager {
             this.elBox.textContent = 'データがありません';
             return;
         }
+        // Fisher-Yates に近い簡易シャッフルで QUESTION_COUNT 問を抽出
         this.selected = [...this.allData]
             .sort(() => 0.5 - Math.random())
             .slice(0, GameConstants.QUESTION_COUNT);
@@ -160,12 +162,14 @@ export class QuizManager {
         const correctTxt   = this.selected[this.current].choices[correctIndex];
 
         if (type === GameDefinitions.LIFELINES.FIFTY) {
+            // 正解以外の選択肢をランダムに 2 つ選んで非表示にする
             const btns = Array.from(document.querySelectorAll('.choice-btn'));
             btns.filter(b => b.textContent !== correctTxt)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 2)
                 .forEach(b => b.style.visibility = 'hidden');
         } else {
+            // 電話・観客はモーダルでヒントを表示（正解を稀にぼかす文言）
             const msg = type === GameDefinitions.LIFELINES.TEL
                 ? `友人:「確か、答えは『${correctTxt}』だったはずだ。確率は高いよ。」`
                 : `観客の反応: 約65%が「${correctTxt}」に注目しているようです。`;
