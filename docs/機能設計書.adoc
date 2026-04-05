@@ -1,0 +1,226 @@
+= 機能設計書
+:project: QuizGame
+:author: Takumi Harada
+:revdate: 2026-04-05
+:doctype: article
+:toc:
+:toc-title: 目次
+:sectnums:
+
+== 概要
+
+本書はプロジェクト「{project}」の主要クラス・メソッド・分岐ロジックを記述した技術設計書です。
+
+---
+
+== モジュール構成
+
+[cols="2,4", options="header"]
+|===
+|ファイルパス
+|担当責務
+
+|quiz-app/src/core/quiz-engine.js
+|問題進行・回答判定・ライフライン管理
+
+|quiz-app/src/constants/definitions.js
+|難易度・ライフライン・結果コード定義
+
+|quiz-app/src/constants/quiz-constants.js
+|出題数・タイミング・賞金テーブル
+
+|quiz-app/src/constants/quiz-data.js
+|難易度別問題データ集約エントリー
+
+|quiz-app/src/constants/data/beginner-data.js
+|初級問題データ
+
+|quiz-app/src/constants/data/normal-data.js
+|通常問題データ
+
+|quiz-app/src/constants/data/elite-data.js
+|上級問題データ
+
+|quiz-app/src/constants/data/cpa-data.js
+|CPA 問題データ
+
+|quiz-app/src/ui/components.js
+|選択肢ボタン・賞金リスト・ハイライト等の UI 描画
+
+|quiz-app/src/ui/header.js
+|ページ共通ヘッダー描画
+
+|quiz-app/src/utils/validator.js
+|問題データの整合性検証
+
+|quiz-app/src/utils/xss.js
+|XSS 対策・エスケープ処理
+
+|quiz-app/src/styles/style-manager.js
+|CSS クラス操作ヘルパー
+
+|quiz-app/main.js
+|ポータル画面の初期化（CPA 秘密ゲート含む）
+
+|===
+
+---
+
+== クラス設計
+
+=== QuizManager（quiz-engine.js）
+
+[cols="2,1,4", options="header"]
+|===
+|メソッド
+|可視性
+|処理内容
+
+|constructor(data)
+|public
+|問題データを受け取り、REWARDS を GameConstants.STANDARD_REWARDS で初期化。DOM 参照を取得する
+
+|bindUIActions()
+|public
+|ポータル戻りリンク・ESC キー・ライフラインボタンのイベントを登録する
+
+|init()
+|public
+|問題データをシャッフルして QUESTION_COUNT 件抽出。賞金リストを描画し、最初の問題を表示する
+
+|render()
+|public
+|current インデックスの問題を表示、選択肢ボタンを生成。賞金ハイライトを更新する
+
+|check(btn, index)
+|public
+|回答ボタン選択時に呼び出す。isWait フラグで多重押しを防止。正解なら正解演出を実行し次問へ、最終問正解で finish(true) を呼ぶ。不正解なら finish(false)
+
+|finish(isWin)
+|public
+|isWin の真偽で WIN / LOSE を分岐し、結果モーダルを表示する
+
+|useLife(id)
+|public
+|ライフライン ID に応じて fifty / tel / aud を分岐実行。使用済みのボタンは disabled にする
+
+|===
+
+=== QuizEngineCPA（quiz-engine.js）
+
+CPA ステージ専用の進行クラス。QuizManager と同構造だが CPA_REWARDS・CPA_DELAY を使用し、専用モーダル文言を持つ。
+
+[cols="2,1,4", options="header"]
+|===
+|メソッド
+|可視性
+|処理内容
+
+|constructor(data)
+|public
+|問題データを受け取り、REWARDS を GameConstants.CPA_REWARDS で初期化する
+
+|bindUIActions()
+|public
+|ポータル戻りリンク・ESC キー・ライフラインボタンのイベントを登録する
+
+|start()
+|public
+|問題データをシャッフルして QUESTION_COUNT 件抽出し、初回描画する
+
+|render()
+|public
+|「CPA EXAM」表記と CPA 専用賞金リストで現在問題を描画する
+
+|check(btn, index)
+|public
+|CPA_DELAY 後に正誤判定を行い、正解なら次問または finish(true)、不正解なら finish(false) を呼ぶ
+
+|useLife(id)
+|public
+|FIFTY・ADVICE・AUDIENCE の CPA 専用文言を出し分ける
+
+|finish(isWin)
+|public
+|PASSED / FAILED の CPA 専用モーダルを表示する
+
+|===
+
+=== PortalManager（main.js）
+
+[cols="2,1,4", options="header"]
+|===
+|メソッド
+|可視性
+|処理内容
+
+|constructor()
+|public
+|クリック数・タイマーを初期化し、secret-trigger の click イベントを登録する
+
+|handleSecretClick()
+|public
+|clicks を加算し、RUMBLE_THRESHOLD 以上なら applyRumble()、SECRET_CLICKS に達したら unlockSecret() を呼ぶ
+
+|applyRumble()
+|private
+|クリック数に比例して logo の拡大率と text-shadow を強める
+
+|unlockSecret()
+|private
+|CPA ACCESS 表示後に showGateDialog() を表示し、承認なら cpa.html へ遷移、キャンセルなら reload() する
+
+|resetTimer()
+|private
+|RESET_TIMEOUT ms 操作がなければ clearState() を呼ぶタイマーを張り直す
+
+|clearState()
+|private
+|クリック数・body class・logo のスタイルを初期状態へ戻す
+
+|===
+
+---
+
+== ゲーム進行フロー
+
+[source]
+----
+1. ポータル（main.js）でレベルを選択
+2. 各レベルの HTML（beginner.html 等）を読み込み
+3. QuizManager.init() → 問題シャッフル → render()
+4. ユーザーが選択肢をクリック → check()
+5. 正解: CORRECT_DELAY 後に次問 → 最終問で finish(true)
+   不正解: LOSE_DELAY 後に finish(false)
+6. 結果モーダル表示 → リトライで location.reload()
+----
+
+---
+
+== CPA 秘密ゲート（main.js）
+
+[cols="2,4", options="header"]
+|===
+|定数/処理
+|説明
+
+|SECRET_CLICKS = 6
+|ロゴを 6 回クリックすると CPA ボタンが解放される
+
+|RUMBLE_THRESHOLD = 4
+|4 回目から振動エフェクトが発生して演出を強調する
+
+|RESET_TIMEOUT = 1200
+|RESET_TIMEOUT ms 操作がないとカウントがリセットされる
+
+|UNLOCK_DELAY = 200
+|解放後 200ms 遅延してダイアログを表示する
+
+|===
+
+---
+
+== セキュリティ考慮事項
+
+* XSS: UIComponents での動的テキストは textContent を使用し innerHTML は避ける
+* 入力検証: QuizManager.init() は Validator.isValidQuizData() で問題データを検証してから抽出する
