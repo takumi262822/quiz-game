@@ -7,6 +7,16 @@
 :toc-title: 目次
 :sectnums:
 
+== 変更履歴
+
+[cols="1,2,3,3,3,3", options="header", align="center"]
+|===
+^.^|No. ^.^|版数 ^.^|変更者 <.^|作成日/変更日 <.^|変更箇所 <.^|変更内容
+
+^.^|1 |1.00 |Takumi Harada |2026/4/5 <.^|- <.^|新規作成
+^.^|2 |1.01 |Takumi Harada |2026/4/5 <.^|モジュール構成表 <.^|【定数】【コード定義】【共通処理】タグを担当責務列に追記
+|===
+
 == 概要
 
 本書はプロジェクト「{project}」の主要クラス・メソッド・分岐ロジックを記述した技術設計書です。
@@ -24,10 +34,12 @@
 |問題進行・回答判定・ライフライン管理
 
 |quiz-app/src/constants/definitions.js
-|難易度・ライフライン・結果コード定義
+|難易度・ライフライン・結果コード定義 +
+【コード定義】初級 / 通常 / 上級 / CPA / 50:50 / テレフォン / オーディエンス / クリア / ゲームオーバー
 
 |quiz-app/src/constants/quiz-constants.js
-|出題数・タイミング・賞金テーブル
+|出題数・タイミング・賞金テーブル +
+【定数】出題数 / 通常モード判定待機時間 / 正解後遷移待機時間 / 不正解後遷移待機時間 / CPAモード判定待機時間 / CPAモード不正解後遷移待機時間 / CPA解放必要クリック数 / 振動エフェクト開始クリック数 / クリックリセット待機時間 / 解放ダイアログ表示遅延 / 通常モード賞金テーブル / CPAモード賞金テーブル
 
 |quiz-app/src/constants/quiz-data.js
 |難易度別問題データ集約エントリー
@@ -51,10 +63,12 @@
 |ページ共通ヘッダー描画
 
 |quiz-app/src/utils/validator.js
-|問題データの整合性検証
+|問題データの整合性検証 +
+【共通処理】isValidLevel / isValidQuizData / isValidQuestion
 
 |quiz-app/src/utils/xss.js
-|XSS 対策・エスケープ処理
+|XSS 対策・エスケープ処理 +
+【共通処理】escapeHTML / safeSetText / safeSetHTML / isSafeURL / setSafeHref / safeJSONParse / safeSetClass
 
 |quiz-app/src/styles/style-manager.js
 |CSS クラス操作ヘルパー
