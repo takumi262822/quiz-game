@@ -1,6 +1,7 @@
-/**
+﻿/**
  * 選択肢ボタン・賞金一覧などクイズ画面共通の DOM 部品を生成・更新するクラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class UIComponents {
     /**

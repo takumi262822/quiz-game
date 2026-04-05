@@ -5,6 +5,7 @@
  * @date 2026-03-31
  */
 import { GameConstants } from './constants/quiz-constants.js';
+import { Footer } from './ui/footer.js';
 
 function showGateDialog(message) {
     return new Promise((resolve) => {
@@ -163,3 +164,4 @@ class PortalManager {
 }
 
 new PortalManager();
+new Footer().setYear();

@@ -1,6 +1,7 @@
-/**
+﻿/**
  * 難易度値・クイズデータ・各設問の形式チェックを行うバリデーションクラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 import { GameDefinitions } from '../constants/definitions.js';
 

@@ -1,7 +1,8 @@
-/**
+﻿/**
  * XSS（クロスサイトスクリプティング）対策を統一管理するサニタイズクラス。
  * DOM 反映前に必ず経由する。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class XSSProtection {
     /**

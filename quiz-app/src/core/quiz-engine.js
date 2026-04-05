@@ -100,6 +100,7 @@ export class QuizManager {
         }
     }
 
+    // --- 問題データを抽出し、クイズを開始する ---
     init() {
         if (!Validator.isValidQuizData(this.allData)) {
             this.elBox.textContent = 'データがありません';
@@ -112,6 +113,7 @@ export class QuizManager {
         this.render();
     }
 
+    // --- 現在の問題を画面に描画する ---
     render() {
         this.isWait = false;
         const q = this.selected[this.current];
@@ -131,6 +133,7 @@ export class QuizManager {
         });
     }
 
+    // --- 回答ボタンのクリックを処理し、正誤判定を行う ---
     check(btn, index) {
         if (this.isWait) return;
         this.isWait = true;
@@ -141,19 +144,13 @@ export class QuizManager {
             if (index === correct) {
                 btn.classList.add('correct');
                 setTimeout(() => {
-                    this.current++;
-                    if (this.current < GameConstants.QUESTION_COUNT) this.render();
-                    else this.finish(true);
-                }, GameConstants.CORRECT_DELAY);
-            } else {
-                btn.classList.add('wrong');
-                const btns = Array.from(this.elChoices.querySelectorAll('.choice-btn'));
                 if (btns[correct]) btns[correct].classList.add('correct');
                 setTimeout(() => this.finish(false), GameConstants.LOSE_DELAY);
             }
         }, GameConstants.STANDARD_DELAY);
     }
 
+    // --- ライフラインを使用する（50:50 / 電話 / 観客） ---
     useLife(type) {
         const btn = document.getElementById(type);
         if (this.isWait || btn.classList.contains('used')) return;
@@ -176,6 +173,7 @@ export class QuizManager {
         }
     }
 
+    // --- クイズ終了：勝利 or 敗北モーダルを表示する ---
     finish(win) {
         UIComponents.showModal(
             this.elModal,
@@ -189,7 +187,7 @@ export class QuizManager {
 /**
  * CPA ステージ専用の問題進行クラス。CPA_REWARDS と CPA_DELAY を使用する。
  */
-export class QuizEngineCPA {
+    // --- DOMノード参照・状態変数の初期化（CPA用） ---
     constructor(data) {
         this.allData = data;
         this.selected = [];
@@ -206,6 +204,7 @@ export class QuizEngineCPA {
         this.elRetryBtn   = document.getElementById('retry-btn');
     }
 
+    // --- UIイベントのバインド（ライフライン・リトライ）（CPA用） ---
     bindUIActions() {
         bindPortalActions();
 
@@ -228,6 +227,7 @@ export class QuizEngineCPA {
         }
     }
 
+    // --- 問題データをシャッフルし、CPAクイズを開始 ---
     start() {
         if (!Validator.isValidQuizData(this.allData)) {
             this.elBox.textContent = 'データがありません';
@@ -240,6 +240,7 @@ export class QuizEngineCPA {
         this.render();
     }
 
+    // --- 現在の問題をCPA順次表运で描画 ---
     render() {
         this.isWait = false;
         const q = this.selected[this.current];
@@ -259,6 +260,7 @@ export class QuizEngineCPA {
         });
     }
 
+    // --- 回答の正誤判定（CPA遅延設定適用） ---
     check(btn, index) {
         if (this.isWait) return;
         this.isWait = true;
@@ -280,6 +282,7 @@ export class QuizEngineCPA {
         }, GameConstants.CPA_DELAY);
     }
 
+    // --- ライフラインを使用する（CPA教利系メッセージ） ---
     useLife(type) {
         const correctIndex = this.selected[this.current].answer;
         const correctTxt   = this.selected[this.current].choices[correctIndex];
@@ -297,6 +300,7 @@ export class QuizEngineCPA {
         }
     }
 
+    // --- クイズ終了：合格 / 不合格モーダルを表示（CPA用） ---
     finish(win) {
         UIComponents.showModal(
             this.elModal,

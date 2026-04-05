@@ -1,8 +1,9 @@
-/**
+﻿/**
  * QuizConstants クラス - データ集約クラス
  * 各レベルのデータファイルを集約し、ゲームエンジン用フォーマットに変換する。
  * 実データは constants/data/ 配下の各ファイルに分離。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 import { GameDefinitions } from './definitions.js';
 import { BEGINNER_DATA } from './data/beginner-data.js';

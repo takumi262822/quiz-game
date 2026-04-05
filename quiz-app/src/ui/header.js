@@ -1,6 +1,7 @@
-/**
+﻿/**
  * クイズ各難易度画面の共通ヘッダー（タイトル・サブタイトル）を生成・插入する UI クラス。
  * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class Header {
     /**

@@ -1,5 +1,7 @@
-/**
+﻿/**
  * CSS ファイルの動的ロードと重複防止を管理する静的クラス。
+ * @author Takumi Harada
+ * @date 2026/3/31
  */
 export class StyleManager {
     static #loaded = new Set();
