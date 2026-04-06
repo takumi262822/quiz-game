@@ -151,8 +151,13 @@ export class QuizManager {
             if (index === correct) {
                 btn.classList.add('correct');
                 setTimeout(() => {
-                // 正解ボタンの DOM 要素が存在する場合のみハイライト制御を行う
-                if (btns[correct]) btns[correct].classList.add('correct');
+                    this.current++;
+                    // 次の問題がまだ残っている場合は次問題を描画、全問解答した場合はクリア演出へ進む
+                    if (this.current < GameConstants.QUESTION_COUNT) this.render();
+                    else this.finish(true);
+                }, GameConstants.CORRECT_DELAY);
+            } else {
+                btn.classList.add('wrong');
                 setTimeout(() => this.finish(false), GameConstants.LOSE_DELAY);
             }
         }, GameConstants.STANDARD_DELAY);
@@ -199,6 +204,7 @@ export class QuizManager {
 /**
  * CPA ステージ専用の問題進行クラス。CPA_REWARDS と CPA_DELAY を使用する。
  */
+export class QuizEngineCPA {
     // --- DOMノード参照・状態変数の初期化（CPA用） ---
     constructor(data) {
         this.allData = data;
