@@ -324,7 +324,7 @@ export class QuizEngineCPA {
             showNotice(`シニアパートナー：「答えは『${correctTxt}』だと考えるが、監査判断は君に委ねる。」`, 'アドバイス');
         // CPA用: 観客ライフラインの場合は聴衆率データモードでメッセージを表示する
         } else {
-            showNotice(`受験生の反応: 絀68%が「${correctTxt}」を選択しているようです。`, '観客の声');
+            showNotice(`受験生の反応: 約68%が「${correctTxt}」を選択しているようです。`, '観客の声');
         }
     }
 
