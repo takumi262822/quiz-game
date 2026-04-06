@@ -90,10 +90,12 @@ export class QuizManager {
          GameDefinitions.LIFELINES.TEL,
          GameDefinitions.LIFELINES.AUDIENCE].forEach((id) => {
             const btn = document.getElementById(id);
+            // ライフラインボタンが DOM に存在しない場合はイベント登録をスキップする
             if (!btn) return;
             btn.addEventListener('click', () => this.useLife(id));
         });
 
+        // リトライボタンが DOM に存在する場合のみリロードイベントを登録する
         if (this.elRetryBtn) {
             this.elRetryBtn.addEventListener('click', () => {
                 window.location.reload();
@@ -103,6 +105,7 @@ export class QuizManager {
 
     // --- 問題データを抽出し、クイズを開始する ---
     init() {
+        // 問題データが無効な場合はエラーメッセージを表示して剆断する
         if (!Validator.isValidQuizData(this.allData)) {
             this.elBox.textContent = 'データがありません';
             return;
@@ -137,15 +140,18 @@ export class QuizManager {
 
     // --- 回答ボタンのクリックを処理し、正誤判定を行う ---
     check(btn, index) {
+        // 判定待機中は再クリックを無視して二重回答を防ぐ
         if (this.isWait) return;
         this.isWait = true;
         btn.classList.add('selected');
 
         setTimeout(() => {
             const correct = this.selected[this.current].answer;
+            // 選択した選択肢のインデックスが正解番号と一致する場合は正解演出へ進む
             if (index === correct) {
                 btn.classList.add('correct');
                 setTimeout(() => {
+                // 正解ボタンの DOM 要素が存在する場合のみハイライト制御を行う
                 if (btns[correct]) btns[correct].classList.add('correct');
                 setTimeout(() => this.finish(false), GameConstants.LOSE_DELAY);
             }
@@ -155,12 +161,14 @@ export class QuizManager {
     // --- ライフラインを使用する（50:50 / 電話 / 観客） ---
     useLife(type) {
         const btn = document.getElementById(type);
+        // 判定待機中または既に使用済みのライフラインは操作を無視する
         if (this.isWait || btn.classList.contains('used')) return;
         btn.classList.add('used');
 
         const correctIndex = this.selected[this.current].answer;
         const correctTxt   = this.selected[this.current].choices[correctIndex];
 
+        // ライフラインの種別によって処理を分岐する（50:50は選択肢除外、その他はモーダル表示）
         if (type === GameDefinitions.LIFELINES.FIFTY) {
             // 正解以外の選択肢をランダムに 2 つ選んで非表示にする
             const btns = Array.from(document.querySelectorAll('.choice-btn'));
@@ -216,14 +224,17 @@ export class QuizManager {
          GameDefinitions.LIFELINES.TEL,
          GameDefinitions.LIFELINES.AUDIENCE].forEach((id) => {
             const btn = document.getElementById(id);
+            // ライフラインボタンが DOM に存在しない場合はイベント登録をスキップする　(CPA用)
             if (!btn) return;
             btn.addEventListener('click', () => {
+                // CPA用: 判定待機中または使用済みのライフラインは操作を無視する
                 if (this.isWait || btn.classList.contains('used')) return;
                 btn.classList.add('used');
                 this.useLife(id);
             });
         });
 
+        // リトライボタンが DOM に存在する場合のみリロードイベントを登録する　(CPA用)
         if (this.elRetryBtn) {
             this.elRetryBtn.addEventListener('click', () => {
                 window.location.reload();
@@ -233,6 +244,7 @@ export class QuizManager {
 
     // --- 問題データをシャッフルし、CPAクイズを開始 ---
     start() {
+        // 問題データが無効な場合はエラーメッセージを表示して剆断する
         if (!Validator.isValidQuizData(this.allData)) {
             this.elBox.textContent = 'データがありません';
             return;
@@ -266,16 +278,19 @@ export class QuizManager {
 
     // --- 回答の正誤判定（CPA遅延設定適用） ---
     check(btn, index) {
+        // CPA用: 判定待機中は再クリックを無視して二重回答を防ぐ
         if (this.isWait) return;
         this.isWait = true;
         btn.classList.add('selected');
 
         setTimeout(() => {
             const correct = this.selected[this.current].answer;
+            // CPA用: 選択した選択肢のインデックスが正解番号と一致する場合は正解演出へ進む
             if (index === correct) {
                 btn.classList.add('correct');
                 setTimeout(() => {
                     this.current++;
+                    // 次の問題がまだ残っている場合は次問題を描画、全問解答届いた場合はクリア演出へ進む
                     if (this.current < GameConstants.QUESTION_COUNT) this.render();
                     else this.finish(true);
                 }, GameConstants.CORRECT_DELAY);
@@ -291,14 +306,17 @@ export class QuizManager {
         const correctIndex = this.selected[this.current].answer;
         const correctTxt   = this.selected[this.current].choices[correctIndex];
 
+        // CPA用: ライフラインの種別によって処理を分岐する
         if (type === GameDefinitions.LIFELINES.FIFTY) {
             const btns = Array.from(document.querySelectorAll('.choice-btn'));
             btns.filter(b => b.textContent !== correctTxt)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 2)
                 .forEach(b => b.style.visibility = 'hidden');
+        // CPA用: テレフォンライフラインの場合はシニアパートナーモードでメッセージを表示する
         } else if (type === GameDefinitions.LIFELINES.TEL) {
             showNotice(`シニアパートナー:「答えは『${correctTxt}』だと考えるが、監査判断は君に委ねる。」`, 'ADVICE');
+        // CPA用: 観客ライフラインの場合は聴衆率データモードでメッセージを表示する
         } else {
             showNotice(`受験生の反応: 約68%が「${correctTxt}」を選択しているようです。`, 'AUDIENCE');
         }

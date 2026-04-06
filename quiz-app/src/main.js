@@ -113,8 +113,10 @@ class PortalManager {
         this.clicks++;
         this.resetTimer();
 
+        // 規定クリック数に達した場合は CPA 解放処理に進む
         if (this.clicks === GameConstants.SECRET_CLICKS) {
             this.unlockSecret();
+        // 振動閾値に達した場合はロゴの振動エフェクトを適用する
         } else if (this.clicks >= GameConstants.RUMBLE_THRESHOLD) {
             this.applyRumble();
         }
@@ -139,6 +141,7 @@ class PortalManager {
                 'ここから先は、監査の真実を知る者のみが立ち入れる領域です。\n' +
                 '職業倫理に基づき、アクセスを継続しますか？'
             );
+            // ゲートダイアログで承認された場合は CPA ステージに遷移する
             if (accepted) {
                 window.location.href = '../screens/main/cpa.html';
                 return;

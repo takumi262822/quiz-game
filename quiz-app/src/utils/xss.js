@@ -12,7 +12,9 @@ export class XSSProtection {
      * @returns {string} エスケープ後の文字列
      */
     static escapeHTML(str) {
+        // null・undefined・空文字の場合は空文字を返す
         if (!str) return '';
+        // 文字列以外の型の場合は安全のため空文字を返す
         if (typeof str !== 'string') {
             return '';
         }
@@ -35,6 +37,7 @@ export class XSSProtection {
      * @returns {boolean} 成功したかどうか
      */
     static safeSetText(el, text) {
+        // 有効な DOM 要素でない場合は警告を出して失敗を返す
         if (!el || !(el instanceof HTMLElement)) {
             console.warn('XSSProtection: 有効なDOMエレメントではありません');
             return false;
@@ -56,6 +59,7 @@ export class XSSProtection {
      * @returns {boolean} 成功したかどうか
      */
     static safeSetHTML(el, html, allowedTags = ['b', 'i', 'em', 'strong', 'br', 'p']) {
+        // 有効な DOM 要素でない場合は警告を出して失敗を返す
         if (!el || !(el instanceof HTMLElement)) {
             console.warn('XSSProtection: 有効なDOMエレメントではありません');
             return false;
@@ -103,6 +107,7 @@ export class XSSProtection {
      * @returns {boolean} 安全ならtrue
      */
     static isSafeURL(url) {
+        // URLが空または文字列型でない場合は不安全と判定する
         if (!url || typeof url !== 'string') {
             return false;
         }
@@ -126,6 +131,7 @@ export class XSSProtection {
      * @returns {boolean} 成功したかどうか
      */
     static setSafeHref(el, href) {
+        // URLが安全でない場合は警告を出して設定を中断する
         if (!this.isSafeURL(href)) {
             console.warn('XSSProtection: 不安全なURLです', href);
             return false;
@@ -160,9 +166,11 @@ export class XSSProtection {
      * @returns {boolean} 成功したかどうか
      */
     static safeSetClass(el, className) {
+        // 有効な DOM 要素でない場合は失敗を返す
         if (!el || !(el instanceof HTMLElement)) {
             return false;
         }
+        // クラス名が文字列型でない場合は失敗を返す
         if (typeof className !== 'string') {
             return false;
         }
