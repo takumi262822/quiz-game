@@ -37,7 +37,7 @@ function ensureNoticeModal() {
     modal.id = 'notice-modal';
     modal.className = 'overlay';
     modal.innerHTML = [
-        '<h1 id="notice-title">HINT</h1>',
+        '<h1 id="notice-title">ヒント</h1>',
         '<p id="notice-msg" style="margin:16px 0; max-width: 640px; text-align:center;"></p>',
         '<button id="notice-close" class="retry-btn" type="button">閉じる</button>'
     ].join('');
@@ -51,7 +51,7 @@ function ensureNoticeModal() {
     return modal;
 }
 
-function showNotice(message, title = 'HINT') {
+function showNotice(message, title = 'ヒント') {
     const modal = ensureNoticeModal();
     const titleEl = document.getElementById('notice-title');
     const msgEl = document.getElementById('notice-msg');
@@ -123,7 +123,7 @@ export class QuizManager {
         this.isWait = false;
         const q = this.selected[this.current];
 
-        this.elLevel.textContent = `LEVEL ${String(this.current + 1).padStart(2, '0')}`;
+        this.elLevel.textContent = `レベル ${String(this.current + 1).padStart(2, '0')}`;
         this.elBox.textContent   = q.question;
 
         UIComponents.highlightReward(this.current);
@@ -189,7 +189,7 @@ export class QuizManager {
     finish(win) {
         UIComponents.showModal(
             this.elModal,
-            win ? 'BRILLIANT!' : 'GAME OVER',
+            win ? '素晴らしい！' : 'ゲームオーバー',
             win ? '素晴らしい知性です。1000万ドリームを手にしました。'
                 : '惜しい挑戦でした。知恵を蓄え、再訪を。'
         );
@@ -261,7 +261,7 @@ export class QuizManager {
         this.isWait = false;
         const q = this.selected[this.current];
 
-        this.elLevel.textContent = `CPA EXAM #${String(this.current + 1).padStart(2, '0')}`;
+        this.elLevel.textContent = `CPA 第${String(this.current + 1).padStart(2, '0')}問`;
         this.elBox.textContent   = q.question;
 
         UIComponents.highlightReward(this.current);
@@ -315,10 +315,10 @@ export class QuizManager {
                 .forEach(b => b.style.visibility = 'hidden');
         // CPA用: テレフォンライフラインの場合はシニアパートナーモードでメッセージを表示する
         } else if (type === GameDefinitions.LIFELINES.TEL) {
-            showNotice(`シニアパートナー:「答えは『${correctTxt}』だと考えるが、監査判断は君に委ねる。」`, 'ADVICE');
+            showNotice(`シニアパートナー：「答えは『${correctTxt}』だと考えるが、監査判断は君に委ねる。」`, 'アドバイス');
         // CPA用: 観客ライフラインの場合は聴衆率データモードでメッセージを表示する
         } else {
-            showNotice(`受験生の反応: 約68%が「${correctTxt}」を選択しているようです。`, 'AUDIENCE');
+            showNotice(`受験生の反応: 絀68%が「${correctTxt}」を選択しているようです。`, '観客の声');
         }
     }
 
@@ -326,7 +326,7 @@ export class QuizManager {
     finish(win) {
         UIComponents.showModal(
             this.elModal,
-            win ? 'PASSED' : 'FAILED',
+            win ? '合格' : '不合格',
             win ? '全問クリア。監査の世界へ、ようこそ。'
                 : '不合格。監査基準を再確認し、次の試験期に臨め。'
         );
